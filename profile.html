@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Raleway", sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      transition: 0.3s;
+      width: 40%;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .card:hover {
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+
+    .container {
+      padding: 16px;
+      text-align: center;
+    }
+
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      object-fit: cover;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .upload-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .upload-btn:hover {
+      background-color: #45a049;
+    }
+
+    .upload-info {
+      font-size: 14px;
+      color: #888;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+
+
+  <div class="card">
+    <!-- Profile Image -->
+    <img id="profile-pic" src="img_avatar.png" alt="Default Avatar" class="profile-pic">
+    
+    <div class="container">
+      <h4><b id="profile-name">Loading...</b></h4>
+      <p id="profile-email">Email: Loading...</p>
+      <p id="profile-username">Username: Loading...</p>
+
+      <!-- Upload Image Section -->
+      <form action="upload.php" method="POST" enctype="multipart/form-data">
+        <input type="file" id="file-input" name="profilePic" accept="image/*" onchange="previewImage()" required>
+        <label for="file-input" class="upload-btn">Upload New Picture</label>
+      </form>
+      <p class="upload-info">Click to upload a new profile picture</p>
+    </div>
+  </div>
+
+  <script>
+    // Function to preview the uploaded image
+    function previewImage() {
+      const fileInput = document.getElementById('file-input');
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      // Validate file type
+      if (file && file.type.startsWith('image/')) {
+        reader.onload = function(e) {
+          const profilePic = document.getElementById('profile-pic');
+          profilePic.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      } else {
+        alert('Please upload a valid image file.');
+      }
+    }
+
+    // Fetch user data from localStorage (use defaults if no data is found)
+    const username = localStorage.getItem('username') || 'Guest';
+    const name = localStorage.getItem('name') || 'Unknown Name';
+    const email = localStorage.getItem('email') || 'unknown@example.com';
+    const profilePic = localStorage.getItem('profilePic') || 'img_avatar.png'; // Default profile picture
+
+    // Display user data on profile page
+    document.getElementById('profile-name').textContent = name;
+    document.getElementById('profile-email').textContent = `Email: ${email}`;
+    document.getElementById('profile-username').textContent = `Username: ${username}`;
+    document.getElementById('profile-pic').src = profilePic; // Update profile picture from localStorage
+  </script>
+
+</body>
+</html>
